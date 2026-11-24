@@ -1,4 +1,4 @@
-const NanoJS = {
+const ShortJS = {
   aliases: {
     fu: 'function', af: 'async function', gf: 'function*', agf: 'async function*',
     aw: 'await', rt: 'return', yld: 'yield', ct: 'const', lt: 'let', vr: 'var',
@@ -131,3 +131,11 @@ const NanoJS = {
     catch (err) { err.stack = this.mapStack(err, lineMap); throw err; }
   }
 };
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = ShortJS;
+  module.exports.ShortJS = ShortJS;
+}
+if (typeof globalThis !== 'undefined') {
+  globalThis.ShortJS = ShortJS;
+}
