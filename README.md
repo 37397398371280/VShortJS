@@ -1,4 +1,4 @@
-# ShortJS
+# NanoJS
 
 An ultra-lightweight, collision-aware JavaScript shorthand preprocessor with template literal `${...}` interpolation support, regex literal awareness, identifier protection, and error stack-trace line remapping.
 
@@ -15,9 +15,9 @@ An ultra-lightweight, collision-aware JavaScript shorthand preprocessor with tem
 ### Node.js (CommonJS)
 
 ```javascript
-const ShortJS = require('./shortjs.js');
+const NanoJS = require('./nanojs.js');
 
-const expanded = ShortJS.expand(`
+const expanded = NanoJS.expand(`
   fu greet(name) {
     ct clean = name.trm().tupc();
     rt "Hello, " + clean + "!";
@@ -31,9 +31,9 @@ console.log(expanded);
 ### Browser (No Node.js Required)
 
 ```html
-<script src="./shortjs.js"></script>
+<script src="./nanojs.js"></script>
 <script>
-  const result = ShortJS.run(`
+  const result = NanoJS.run(`
     ct nums = [1, 2, 3, 4];
     rt nums.flt(n => n % 2 === 0).mp(n => n * 10);
   `);
@@ -41,49 +41,49 @@ console.log(expanded);
 </script>
 ```
 
-> **Note on CSP / Sandboxes:** `ShortJS.run(...)` compiles expanded code via `new Function(...)`. Environments blocking `unsafe-eval` will disallow `run(...)`, while `expand(...)` and `expandWithMap(...)` continue to work as pure string transformers.
+> **Note on CSP / Sandboxes:** `NanoJS.run(...)` compiles expanded code via `new Function(...)`. Environments blocking `unsafe-eval` will disallow `run(...)`, while `expand(...)` and `expandWithMap(...)` continue to work as pure string transformers.
 
 ## API Reference
 
-### `ShortJS.expand(code, extraA?, extraC?)`
-Expands `code` using `ShortJS.aliases` and `ShortJS.chainAliases` (plus optional per-call `extraA` and `extraC` overrides) and returns the expanded JavaScript string.
+### `NanoJS.expand(code, extraA?, extraC?)`
+Expands `code` using `NanoJS.aliases` and `NanoJS.chainAliases` (plus optional per-call `extraA` and `extraC` overrides) and returns the expanded JavaScript string.
 
-### `ShortJS.expandWithMap(code, extraA?, extraC?)`
+### `NanoJS.expandWithMap(code, extraA?, extraC?)`
 Returns `{ code, lineMap }`, where `code` is the expanded JavaScript string and `lineMap` maps 0-based output line indices to 1-based input source line numbers.
 
-### `ShortJS.run(code, extraA?, extraC?)`
+### `NanoJS.run(code, extraA?, extraC?)`
 Expands `code` via `expandWithMap`, executes it with `new Function(exp)()`, and remaps any thrown error's `stack` using `mapStack(err, lineMap)` before rethrowing.
 
-### `ShortJS.mapStack(err, lineMap)`
+### `NanoJS.mapStack(err, lineMap)`
 Rewrites `:line:col` line numbers in `err.stack` back to their original source line numbers using `lineMap`.
 
-### `ShortJS.protect(...names)` & `ShortJS.unprotect(...names)`
-Adds or removes identifier names in `ShortJS.protectedNames` so matching tokens are never expanded. Both return `this` for chaining.
+### `NanoJS.protect(...names)` & `NanoJS.unprotect(...names)`
+Adds or removes identifier names in `NanoJS.protectedNames` so matching tokens are never expanded. Both return `this` for chaining.
 
 ```javascript
-ShortJS.protect('fl', 'sw');
+NanoJS.protect('fl', 'sw');
 // `fl` and `sw` remain untouched during expansion
-ShortJS.unprotect('fl');
+NanoJS.unprotect('fl');
 ```
 
-### `ShortJS.add(a?, c?)` & `ShortJS.remove(a?, c?)`
+### `NanoJS.add(a?, c?)` & `NanoJS.remove(a?, c?)`
 Adds custom standalone (`a`) or chain (`c`) aliases, or removes existing keys by name. Both return `this` for chaining.
 
 ```javascript
-ShortJS
+NanoJS
   .add({ q1: 'document.querySelector' }, { thn0: 'then' })
   .remove(['vr'], ['pp']);
 ```
 
 ## Default Aliases
 
-### Standalone Aliases (`ShortJS.aliases`)
+### Standalone Aliases (`NanoJS.aliases`)
 - **Functions & async:** `fu` (`function`), `af` (`async function`), `gf` (`function*`), `agf` (`async function*`), `aw` (`await`), `rt` (`return`), `yld` (`yield`)
 - **Declarations & classes:** `ct` (`const`), `lt` (`let`), `vr` (`var`), `cls` (`class`), `ext` (`extends`), `nw` (`new`), `th` (`this`), `spr` (`super`), `imp` (`import`), `exp` (`export`), `df` (`default`), `del` (`delete`), `vd` (`void`), `dbg` (`debugger`)
 - **Control flow & operators:** `ifn` (`if`), `elf` (`else`), `sw` (`switch`), `cs` (`case`), `brk` (`break`), `cnt` (`continue`), `fr` (`for`), `wh` (`while`), `dw` (`do`), `tryc` (`try`), `ctch` (`catch`), `fnl` (`finally`), `thr` (`throw`), `tof` (`typeof`), `iof` (`instanceof`), `inop` (`in`)
 - **Values, console & built-ins:** `tr` (`true`), `fl` (`false`), `nl` (`null`), `und` (`undefined`), `nanv` (`NaN`), `infv` (`Infinity`), `gbl` (`globalThis`), `cl` (`console.log`), `cw` (`console.warn`), `ce` (`console.error`), `jp` (`JSON.parse`), `js` (`JSON.stringify`), `rjs` (`JSON.rawJSON`), `sumpr` (`Math.sumPrecise`), `rxesc` (`RegExp.escape`), `fromas` (`Array.fromAsync`), `itcat` (`Iterator.concat`)
 
-### Chain Aliases (`ShortJS.chainAliases`)
+### Chain Aliases (`NanoJS.chainAliases`)
 - **Array & iteration:** `mp` (`map`), `flt` (`filter`), `rdc` (`reduce`), `fe` (`forEach`), `fnd` (`find`), `fndi` (`findIndex`), `fndl` (`findLast`), `sm` (`some`), `ev` (`every`), `inc` (`includes`), `idx` (`indexOf`), `lidx` (`lastIndexOf`), `slc` (`slice`), `spl` (`splice`), `jn` (`join`), `rv` (`reverse`), `srt` (`sort`), `flm` (`flatMap`), `psh` (`push`), `pp` (`pop`), `shf` (`shift`), `unsh` (`unshift`)
 - **Promise:** `thn` (`then`), `cth` (`catch`), `fin` (`finally`)
 - **String:** `trm` (`trim`), `trms` (`trimStart`), `trme` (`trimEnd`), `tupc` (`toUpperCase`), `tlwc` (`toLowerCase`), `rpl` (`replace`), `rpla` (`replaceAll`), `splt` (`split`), `sw` (`startsWith`), `ew` (`endsWith`), `padl` (`padStart`), `padr` (`padEnd`)
