@@ -1,18 +1,18 @@
 {
-  "name": "shortjs",
+  "name": "nanojs",
   "version": "1.0.0",
   "description": "Ultra-lightweight, collision-aware JavaScript shorthand preprocessor with template interpolation, regex awareness, identifier protection, and stack-trace line remapping.",
-  "main": "./shortjs.js",
-  "module": "./shortjs.js",
+  "main": "./nanojs.js",
+  "module": "./nanojs.js",
   "exports": {
     ".": {
-      "import": "./shortjs.js",
-      "require": "./shortjs.js",
-      "default": "./shortjs.js"
+      "import": "./nanojs.js",
+      "require": "./nanojs.js",
+      "default": "./nanojs.js"
     }
   },
   "files": [
-    "shortjs.js",
+    "nanojs.js",
     "docs.html",
     "LICENSE",
     "README.md"
