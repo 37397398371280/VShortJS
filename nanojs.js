@@ -1,4 +1,4 @@
-const ShortJS = {
+const NanoJS = {
   aliases: {
     fu: 'function', af: 'async function', gf: 'function*', agf: 'async function*',
     aw: 'await', rt: 'return', yld: 'yield', ct: 'const', lt: 'let', vr: 'var',
