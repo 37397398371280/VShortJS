@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ShortJS — Practical Usage Guide &amp; Reference</title>
+  <title>NanoJS — Practical Usage Guide &amp; Reference</title>
   <style>
     :root {
       --bg: #0b1020;
@@ -234,7 +234,7 @@
 <body>
   <div class="app">
     <aside>
-      <div class="brand">ShortJS</div>
+      <div class="brand">NanoJS</div>
       <div class="subbrand">How-To &amp; Reference Guide</div>
       <nav>
         <div class="nav-label">Getting Started</div>
@@ -256,22 +256,22 @@
 
     <main>
       <header class="page-header">
-        <h1>How to Use ShortJS</h1>
+        <h1>How to Use NanoJS</h1>
         <p>
           Practical recipes, patterns, and edge-case behavior for writing, expanding, customizing,
-          and debugging compact JavaScript with <code>ShortJS</code>.
+          and debugging compact JavaScript with <code>NanoJS</code>.
         </p>
       </header>
 
       <section id="quick-start">
         <h2>1. Quick Start &amp; Common Workflows</h2>
         <p>
-          You can use <code>ShortJS</code> in three main ways depending on whether you want to inspect the
+          You can use <code>NanoJS</code> in three main ways depending on whether you want to inspect the
           generated JavaScript, execute it immediately, or transform code in a build step.
         </p>
 
-        <h3>Pattern A: Expand to Standard JavaScript (<code>ShortJS.expand</code>)</h3>
-        <pre><code>ct jsCode = ShortJS.expand(`
+        <h3>Pattern A: Expand to Standard JavaScript (<code>NanoJS.expand</code>)</h3>
+        <pre><code>ct jsCode = NanoJS.expand(`
   fu greet(name) {
     ct clean = name.trm().tupc();
     rt "Hello, " + clean + "!";
@@ -287,8 +287,8 @@ console.log(jsCode);
 // }
 // console.log(greet("  ada  "));</code></pre>
 
-        <h3>Pattern B: Expand and Execute Immediately (<code>ShortJS.run</code>)</h3>
-        <pre><code>ct total = ShortJS.run(`
+        <h3>Pattern B: Expand and Execute Immediately (<code>NanoJS.run</code>)</h3>
+        <pre><code>ct total = NanoJS.run(`
   ct nums = [1, 2, 3, 4, 5];
   rt nums
     .flt(n =&gt; n % 2 === 1)
@@ -298,8 +298,8 @@ console.log(jsCode);
 
 console.log(total); // 90</code></pre>
 
-        <h3>Pattern C: Get Both Expanded Code and Line Map (<code>ShortJS.expandWithMap</code>)</h3>
-        <pre><code>ct { code, lineMap } = ShortJS.expandWithMap(`
+        <h3>Pattern C: Get Both Expanded Code and Line Map (<code>NanoJS.expandWithMap</code>)</h3>
+        <pre><code>ct { code, lineMap } = NanoJS.expandWithMap(`
   fu add(a, b) {
     rt a + b;
   }
@@ -328,7 +328,7 @@ console.log(total); // 90</code></pre>
 
         <h3>Permanent Additions &amp; Removals</h3>
         <pre><code>// Add custom standalone and chain shorthands (returns `this` for chaining)
-ShortJS
+NanoJS
   .add(
     { q1: "document.querySelector", ft: "fetch" },
     { thn0: "then" }
@@ -336,7 +336,7 @@ ShortJS
   .remove(["vr"], ["pp"]); // Remove `vr` standalone alias and `.pp` chain alias</code></pre>
 
         <h3>One-Off Overrides Per Call</h3>
-        <pre><code>ct snippet = ShortJS.expand(
+        <pre><code>ct snippet = NanoJS.expand(
   `rt db.fndById(42);`,
   { db: "databaseService" }, // extra standalone aliases for this call only
   { fndById: "findUserById" } // extra chain aliases for this call only
@@ -351,9 +351,9 @@ ShortJS
           <code>sw</code> (<code>switch</code>) might match a variable or parameter you want to keep as-is.
           Use <code>protect(...names)</code> to block expansion for specific identifiers.
         </p>
-        <pre><code>ShortJS.protect("fl", "sw");
+        <pre><code>NanoJS.protect("fl", "sw");
 
-ct out = ShortJS.expand(`
+ct out = NanoJS.expand(`
   fu toggle(fl, sw) {
     ifn (sw) {
       rt !fl;
@@ -363,7 +363,7 @@ ct out = ShortJS.expand(`
 `);
 // `fl` and `sw` stay `fl` and `sw`; `fu`, `ifn`, and `rt` still expand.
 
-ShortJS.unprotect("fl"); // Re-enable `fl` -> `false` when needed</code></pre>
+NanoJS.unprotect("fl"); // Re-enable `fl` -&gt; `false` when needed</code></pre>
       </section>
 
       <section id="strings-templates-regex">
@@ -377,7 +377,7 @@ ShortJS.unprotect("fl"); // Re-enable `fl` -> `false` when needed</code></pre>
             <li><strong>Regex literals vs. division:</strong> The scanner tracks expression boundaries (<code>needRx</code>) and character classes (<code>[...]</code>) so regex patterns like <code>/\d+/gi</code> or <code>/[a-z/]+/</code> stay intact while division <code>a / b</code> still works.</li>
           </ul>
         </div>
-        <pre><code>ct msg = ShortJS.expand(`
+        <pre><code>ct msg = NanoJS.expand(`
   // ct inside a comment stays ct
   ct word = "rt is a keyword in text";
   ct items = ["a", "b"];
@@ -390,12 +390,12 @@ ShortJS.unprotect("fl"); // Re-enable `fl` -> `false` when needed</code></pre>
       <section id="debugging-errors">
         <h2>6. Debugging &amp; Stack Traces</h2>
         <p>
-          When code executed via <code>ShortJS.run(...)</code> throws an error, ShortJS uses the recorded
+          When code executed via <code>NanoJS.run(...)</code> throws an error, NanoJS uses the recorded
           <code>lineMap</code> and <code>mapStack(err, lineMap)</code> to translate expanded line numbers back to
           the line numbers in your shorthand input.
         </p>
         <pre><code>try {
-  ShortJS.run(`
+  NanoJS.run(`
     ct ok = 1;
     fu failHere() {
       thr nw Error("Something broke");
@@ -407,7 +407,7 @@ ShortJS.unprotect("fl"); // Re-enable `fl` -> `false` when needed</code></pre>
 }</code></pre>
         <div class="box amber">
           <div class="box-title">Practical Tip for Large Codebases</div>
-          ShortJS is great for quick scripts, personal tooling, experimentation, and compact snippets. For
+          NanoJS is great for quick scripts, personal tooling, experimentation, and compact snippets. For
           large multi-file production apps with strict team lint rules or complex AST transforms, prefer
           standard JavaScript paired with conventional build/minification tools.
         </div>
@@ -460,7 +460,7 @@ ShortJS.unprotect("fl"); // Re-enable `fl` -> `false` when needed</code></pre>
 
       <section id="alias-tables">
         <h2>8. Default Alias Reference</h2>
-        <h3>Standalone Aliases (<code>ShortJS.aliases</code>)</h3>
+        <h3>Standalone Aliases (<code>NanoJS.aliases</code>)</h3>
         <table>
           <thead>
             <tr>
@@ -513,7 +513,7 @@ ShortJS.unprotect("fl"); // Re-enable `fl` -> `false` when needed</code></pre>
           </tbody>
         </table>
 
-        <h3>Chain Aliases (<code>ShortJS.chainAliases</code>)</h3>
+        <h3>Chain Aliases (<code>NanoJS.chainAliases</code>)</h3>
         <table>
           <thead>
             <tr>
@@ -554,7 +554,7 @@ ShortJS.unprotect("fl"); // Re-enable `fl` -> `false` when needed</code></pre>
 
       <section id="source-code">
         <h2>9. Full Implementation</h2>
-        <pre><code>const ShortJS = {
+        <pre><code>const NanoJS = {
   aliases: {
     fu: 'function', af: 'async function', gf: 'function*', agf: 'async function*',
     aw: 'await', rt: 'return', yld: 'yield', ct: 'const', lt: 'let', vr: 'var',
