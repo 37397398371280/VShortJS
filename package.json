@@ -1,0 +1,39 @@
+{
+  "name": "shortjs",
+  "version": "1.0.0",
+  "description": "Ultra-lightweight, collision-aware JavaScript shorthand preprocessor with template interpolation, regex awareness, identifier protection, and stack-trace line remapping.",
+  "main": "./shortjs.js",
+  "module": "./shortjs.js",
+  "exports": {
+    ".": {
+      "import": "./shortjs.js",
+      "require": "./shortjs.js",
+      "default": "./shortjs.js"
+    }
+  },
+  "files": [
+    "shortjs.js",
+    "docs.html",
+    "LICENSE",
+    "README.md"
+  ],
+  "keywords": [
+    "shortjs",
+    "preprocessor",
+    "shorthand",
+    "javascript",
+    "ecmascript",
+    "source-map",
+    "stack-trace",
+    "compiler",
+    "ast-free"
+  ],
+  "license": "GPL-3.0",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "test": "node --test",
+    "expand-demo": "node -e \"console.log('Ready for shortjs.js')\""
+  }
+}
