@@ -7,7 +7,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/37397398371280/ShortJS.git"
-  }
+  },
   "exports": {
     ".": {
       "import": "./shortjs.js",
