@@ -131,3 +131,11 @@ const ShortJS = {
     catch (err) { err.stack = this.mapStack(err, lineMap); throw err; }
   }
 };
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = ShortJS;
+  module.exports.ShortJS = ShortJS;
+}
+if (typeof globalThis !== 'undefined') {
+  globalThis.ShortJS = ShortJS;
+}
