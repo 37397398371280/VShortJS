@@ -4,6 +4,10 @@
   "description": "Ultra-lightweight, collision-aware JavaScript shorthand preprocessor with template interpolation, regex awareness, identifier protection, and stack-trace line remapping.",
   "main": "./shortjs.js",
   "module": "./shortjs.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/37397398371280/VShortJS.git"
+  },
   "exports": {
     ".": {
       "import": "./shortjs.js",
