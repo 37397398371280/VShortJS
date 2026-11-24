@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShortJS — Practical Usage Guide &amp; Reference</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --surface: #131c31;
+      --surface-alt: #0f172a;
+      --sidebar: #080c18;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.12);
+      --green: #34d399;
+      --amber: #fbbf24;
+      --border: #24324d;
+      --code-bg: #060913;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 270px 1fr;
+      min-height: 100vh;
+    }
+
+    aside {
+      background: var(--sidebar);
+      border-right: 1px solid var(--border);
+      padding: 24px 16px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .brand {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+    }
+
+    .subbrand {
+      font-size: 0.78rem;
+      color: var(--green);
+      font-weight: 600;
+      margin-top: 4px;
+      margin-bottom: 18px;
+    }
+
+    .nav-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #64748b;
+      font-weight: 700;
+      margin: 16px 10px 6px;
+    }
+
+    nav a {
+      display: block;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 7px 10px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      margin-bottom: 2px;
+    }
+
+    nav a:hover {
+      background: rgba(148, 163, 184, 0.1);
+      color: #f8fafc;
+    }
+
+    main {
+      padding: 40px 56px 96px;
+      max-width: 1060px;
+    }
+
+    header.page-header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 24px;
+      margin-bottom: 36px;
+    }
+
+    header.page-header h1 {
+      margin: 0 0 8px;
+      font-size: 2.2rem;
+      color: #f8fafc;
+    }
+
+    header.page-header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.02rem;
+    }
+
+    section {
+      margin-bottom: 48px;
+      scroll-margin-top: 24px;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      margin: 0 0 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      color: #f8fafc;
+    }
+
+    h3 {
+      font-size: 1.12rem;
+      margin: 22px 0 10px;
+      color: var(--accent);
+    }
+
+    p {
+      margin: 0 0 14px;
+    }
+
+    ul, ol {
+      margin: 0 0 16px;
+      padding-left: 24px;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 0.88em;
+      background: rgba(148, 163, 184, 0.14);
+      color: #7dd3fc;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+      overflow-x: auto;
+      margin: 12px 0 20px;
+      font-size: 0.86rem;
+      line-height: 1.55;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      color: #e2e8f0;
+      font-size: inherit;
+    }
+
+    .box {
+      background: var(--accent-soft);
+      border-left: 4px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      margin: 16px 0;
+    }
+
+    .box.amber {
+      background: rgba(251, 191, 36, 0.1);
+      border-left-color: var(--amber);
+    }
+
+    .box-title {
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 6px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 22px;
+      background: var(--surface);
+      border-radius: 8px;
+      overflow: hidden;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--surface-alt);
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    @media (max-width: 900px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+      aside {
+        position: static;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+      main {
+        padding: 28px 20px 64px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside>
+      <div class="brand">ShortJS</div>
+      <div class="subbrand">How-To &amp; Reference Guide</div>
+      <nav>
+        <div class="nav-label">Getting Started</div>
+        <a href="#quick-start">Quick Start &amp; Workflows</a>
+        <a href="#writing-shorthand">Writing Shorthand Code</a>
+        <a href="#customizing-aliases">Adding, Removing &amp; Scoped Overrides</a>
+
+        <div class="nav-label">Safety &amp; Context</div>
+        <a href="#protecting-names">Protecting Variable Names</a>
+        <a href="#strings-templates-regex">Strings, Templates &amp; Regex</a>
+        <a href="#debugging-errors">Debugging &amp; Stack Traces</a>
+
+        <div class="nav-label">Language &amp; API</div>
+        <a href="#api-summary">Complete API Methods</a>
+        <a href="#alias-tables">Default Alias Reference</a>
+        <a href="#source-code">Full Implementation</a>
+      </nav>
+    </aside>
+
+    <main>
+      <header class="page-header">
+        <h1>How to Use ShortJS</h1>
+        <p>
+          Practical recipes, patterns, and edge-case behavior for writing, expanding, customizing,
+          and debugging compact JavaScript with <code>ShortJS</code>.
+        </p>
+      </header>
+
+      <section id="quick-start">
+        <h2>1. Quick Start &amp; Common Workflows</h2>
+        <p>
+          You can use <code>ShortJS</code> in three main ways depending on whether you want to inspect the
+          generated JavaScript, execute it immediately, or transform code in a build step.
+        </p>
+
+        <h3>Pattern A: Expand to Standard JavaScript (<code>ShortJS.expand</code>)</h3>
+        <pre><code>ct jsCode = ShortJS.expand(`
+  fu greet(name) {
+    ct clean = name.trm().tupc();
+    rt "Hello, " + clean + "!";
+  }
+  cl(greet("  ada  "));
+`);
+
+console.log(jsCode);
+// Output:
+// function greet(name) {
+//   const clean = name.trim().toUpperCase();
+//   return "Hello, " + clean + "!";
+// }
+// console.log(greet("  ada  "));</code></pre>
+
+        <h3>Pattern B: Expand and Execute Immediately (<code>ShortJS.run</code>)</h3>
+        <pre><code>ct total = ShortJS.run(`
+  ct nums = [1, 2, 3, 4, 5];
+  rt nums
+    .flt(n =&gt; n % 2 === 1)
+    .mp(n =&gt; n * 10)
+    .rdc((acc, n) =&gt; acc + n, 0);
+`);
+
+console.log(total); // 90</code></pre>
+
+        <h3>Pattern C: Get Both Expanded Code and Line Map (<code>ShortJS.expandWithMap</code>)</h3>
+        <pre><code>ct { code, lineMap } = ShortJS.expandWithMap(`
+  fu add(a, b) {
+    rt a + b;
+  }
+`);
+// `code` -&gt; expanded JS string
+// `lineMap` -&gt; array mapping 0-based output lines to 1-based input lines</code></pre>
+      </section>
+
+      <section id="writing-shorthand">
+        <h2>2. Writing Shorthand Code Effectively</h2>
+        <ul>
+          <li><strong>Declarations &amp; functions:</strong> Use <code>ct</code> (<code>const</code>), <code>lt</code> (<code>let</code>), <code>vr</code> (<code>var</code>), <code>fu</code> (<code>function</code>), <code>af</code> (<code>async function</code>), <code>gf</code> (<code>function*</code>), <code>agf</code> (<code>async function*</code>), and <code>rt</code> (<code>return</code>).</li>
+          <li><strong>Control flow &amp; errors:</strong> Use <code>ifn</code> (<code>if</code>), <code>elf</code> (<code>else</code>), <code>sw</code> / <code>cs</code> (<code>switch</code> / <code>case</code>), <code>brk</code> (<code>break</code>), <code>cnt</code> (<code>continue</code>), <code>tryc</code> / <code>ctch</code> / <code>fnl</code> (<code>try</code> / <code>catch</code> / <code>finally</code>), and <code>thr</code> (<code>throw</code>).</li>
+          <li><strong>Chained methods:</strong> Put a dot before chain shorthands such as <code>.mp</code> (<code>.map</code>), <code>.flt</code> (<code>.filter</code>), <code>.rdc</code> (<code>.reduce</code>), <code>.fnd</code> (<code>.find</code>), <code>.jn</code> (<code>.join</code>), <code>.splt</code> (<code>.split</code>), and <code>.trm</code> (<code>.trim</code>).</li>
+          <li><strong>Standard JS syntax stays as-is:</strong> Arrow functions (<code>=&gt;</code>), destructuring (<code>{ a, b } = obj</code>), spread/rest (<code>...args</code>), optional chaining (<code>?.</code>), nullish coalescing (<code>??</code>), and private fields (<code>#secret</code>) are standard operators/syntax and are written directly.</li>
+        </ul>
+      </section>
+
+      <section id="customizing-aliases">
+        <h2>3. Adding, Removing &amp; Scoped Overrides</h2>
+        <p>
+          You can mutate the global tables with <code>add</code> and <code>remove</code>, or pass temporary
+          overrides to a single <code>expand</code>, <code>expandWithMap</code>, or <code>run</code> call without
+          polluting global state.
+        </p>
+
+        <h3>Permanent Additions &amp; Removals</h3>
+        <pre><code>// Add custom standalone and chain shorthands (returns `this` for chaining)
+ShortJS
+  .add(
+    { q1: "document.querySelector", ft: "fetch" },
+    { thn0: "then" }
+  )
+  .remove(["vr"], ["pp"]); // Remove `vr` standalone alias and `.pp` chain alias</code></pre>
+
+        <h3>One-Off Overrides Per Call</h3>
+        <pre><code>ct snippet = ShortJS.expand(
+  `rt db.fndById(42);`,
+  { db: "databaseService" }, // extra standalone aliases for this call only
+  { fndById: "findUserById" } // extra chain aliases for this call only
+);
+// -&gt; "return databaseService.findUserById(42);"</code></pre>
+      </section>
+
+      <section id="protecting-names">
+        <h2>4. Protecting Variable &amp; Property Names</h2>
+        <p>
+          Because shorthand tokens are short words, a token like <code>fl</code> (<code>false</code>) or
+          <code>sw</code> (<code>switch</code>) might match a variable or parameter you want to keep as-is.
+          Use <code>protect(...names)</code> to block expansion for specific identifiers.
+        </p>
+        <pre><code>ShortJS.protect("fl", "sw");
+
+ct out = ShortJS.expand(`
+  fu toggle(fl, sw) {
+    ifn (sw) {
+      rt !fl;
+    }
+    rt fl;
+  }
+`);
+// `fl` and `sw` stay `fl` and `sw`; `fu`, `ifn`, and `rt` still expand.
+
+ShortJS.unprotect("fl"); // Re-enable `fl` -> `false` when needed</code></pre>
+      </section>
+
+      <section id="strings-templates-regex">
+        <h2>5. Strings, Template Literals &amp; Regexes</h2>
+        <div class="box">
+          <div class="box-title">How Context Rules Work</div>
+          <ul>
+            <li><strong>Single &amp; double quotes:</strong> Text inside <code>"..."</code> or <code>'...'</code> is treated as literal text and never expanded.</li>
+            <li><strong>Template literals (<code>`...`</code>):</strong> Plain template text is untouched, while expressions inside <code>${...}</code>—including nested braces like object literals—expand shorthands normally.</li>
+            <li><strong>Comments:</strong> Tokens inside <code>//</code> line comments and <code>/* ... */</code> block comments are preserved without expansion.</li>
+            <li><strong>Regex literals vs. division:</strong> The scanner tracks expression boundaries (<code>needRx</code>) and character classes (<code>[...]</code>) so regex patterns like <code>/\d+/gi</code> or <code>/[a-z/]+/</code> stay intact while division <code>a / b</code> still works.</li>
+          </ul>
+        </div>
+        <pre><code>ct msg = ShortJS.expand(`
+  // ct inside a comment stays ct
+  ct word = "rt is a keyword in text";
+  ct items = ["a", "b"];
+  ct info = \`Count: \${items.mp(x =&gt; x.tupc()).jn(",")}\`;
+  ct re = /foo\/bar/i;
+  rt info;
+`);</code></pre>
+      </section>
+
+      <section id="debugging-errors">
+        <h2>6. Debugging &amp; Stack Traces</h2>
+        <p>
+          When code executed via <code>ShortJS.run(...)</code> throws an error, ShortJS uses the recorded
+          <code>lineMap</code> and <code>mapStack(err, lineMap)</code> to translate expanded line numbers back to
+          the line numbers in your shorthand input.
+        </p>
+        <pre><code>try {
+  ShortJS.run(`
+    ct ok = 1;
+    fu failHere() {
+      thr nw Error("Something broke");
+    }
+    failHere();
+  `);
+} catch (err) {
+  console.error(err.stack);
+}</code></pre>
+        <div class="box amber">
+          <div class="box-title">Practical Tip for Large Codebases</div>
+          ShortJS is great for quick scripts, personal tooling, experimentation, and compact snippets. For
+          large multi-file production apps with strict team lint rules or complex AST transforms, prefer
+          standard JavaScript paired with conventional build/minification tools.
+        </div>
+      </section>
+
+      <section id="api-summary">
+        <h2>7. Complete API Methods</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>API</th>
+              <th>Signature</th>
+              <th>What It Does</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>expand</code></td>
+              <td><code>expand(code, extraA?, extraC?)</code></td>
+              <td>Returns the expanded JavaScript string.</td>
+            </tr>
+            <tr>
+              <td><code>expandWithMap</code></td>
+              <td><code>expandWithMap(code, extraA?, extraC?)</code></td>
+              <td>Returns <code>{ code, lineMap }</code> with expanded code and line index mapping.</td>
+            </tr>
+            <tr>
+              <td><code>run</code></td>
+              <td><code>run(code, extraA?, extraC?)</code></td>
+              <td>Expands and runs code via <code>new Function</code>, remapping thrown stack traces.</td>
+            </tr>
+            <tr>
+              <td><code>mapStack</code></td>
+              <td><code>mapStack(err, lineMap)</code></td>
+              <td>Rewrites <code>:line:col</code> entries in <code>err.stack</code> using <code>lineMap</code>.</td>
+            </tr>
+            <tr>
+              <td><code>protect</code> / <code>unprotect</code></td>
+              <td><code>protect(...names)</code> / <code>unprotect(...names)</code></td>
+              <td>Prevents or allows expansion for specific identifier names.</td>
+            </tr>
+            <tr>
+              <td><code>add</code> / <code>remove</code></td>
+              <td><code>add(a?, c?)</code> / <code>remove(a?, c?)</code></td>
+              <td>Adds or deletes entries in <code>aliases</code> and <code>chainAliases</code>.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="alias-tables">
+        <h2>8. Default Alias Reference</h2>
+        <h3>Standalone Aliases (<code>ShortJS.aliases</code>)</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Group</th>
+              <th>Shorthand &rarr; Target</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Functions &amp; Async</td>
+              <td>
+                <code>fu</code>&rarr;<code>function</code>, <code>af</code>&rarr;<code>async function</code>,
+                <code>gf</code>&rarr;<code>function*</code>, <code>agf</code>&rarr;<code>async function*</code>,
+                <code>aw</code>&rarr;<code>await</code>, <code>rt</code>&rarr;<code>return</code>, <code>yld</code>&rarr;<code>yield</code>
+              </td>
+            </tr>
+            <tr>
+              <td>Variables, Classes &amp; Modules</td>
+              <td>
+                <code>ct</code>&rarr;<code>const</code>, <code>lt</code>&rarr;<code>let</code>, <code>vr</code>&rarr;<code>var</code>,
+                <code>cls</code>&rarr;<code>class</code>, <code>ext</code>&rarr;<code>extends</code>, <code>nw</code>&rarr;<code>new</code>,
+                <code>th</code>&rarr;<code>this</code>, <code>spr</code>&rarr;<code>super</code>, <code>imp</code>&rarr;<code>import</code>,
+                <code>exp</code>&rarr;<code>export</code>, <code>df</code>&rarr;<code>default</code>, <code>del</code>&rarr;<code>delete</code>,
+                <code>vd</code>&rarr;<code>void</code>, <code>dbg</code>&rarr;<code>debugger</code>
+              </td>
+            </tr>
+            <tr>
+              <td>Control Flow &amp; Operators</td>
+              <td>
+                <code>ifn</code>&rarr;<code>if</code>, <code>elf</code>&rarr;<code>else</code>, <code>sw</code>&rarr;<code>switch</code>,
+                <code>cs</code>&rarr;<code>case</code>, <code>brk</code>&rarr;<code>break</code>, <code>cnt</code>&rarr;<code>continue</code>,
+                <code>fr</code>&rarr;<code>for</code>, <code>wh</code>&rarr;<code>while</code>, <code>dw</code>&rarr;<code>do</code>,
+                <code>tryc</code>&rarr;<code>try</code>, <code>ctch</code>&rarr;<code>catch</code>, <code>fnl</code>&rarr;<code>finally</code>,
+                <code>thr</code>&rarr;<code>throw</code>, <code>tof</code>&rarr;<code>typeof</code>, <code>iof</code>&rarr;<code>instanceof</code>,
+                <code>inop</code>&rarr;<code>in</code>
+              </td>
+            </tr>
+            <tr>
+              <td>Values, Console &amp; Built-ins</td>
+              <td>
+                <code>tr</code>&rarr;<code>true</code>, <code>fl</code>&rarr;<code>false</code>, <code>nl</code>&rarr;<code>null</code>,
+                <code>und</code>&rarr;<code>undefined</code>, <code>nanv</code>&rarr;<code>NaN</code>, <code>infv</code>&rarr;<code>Infinity</code>,
+                <code>gbl</code>&rarr;<code>globalThis</code>, <code>cl</code>&rarr;<code>console.log</code>, <code>cw</code>&rarr;<code>console.warn</code>,
+                <code>ce</code>&rarr;<code>console.error</code>, <code>jp</code>&rarr;<code>JSON.parse</code>, <code>js</code>&rarr;<code>JSON.stringify</code>,
+                <code>rjs</code>&rarr;<code>JSON.rawJSON</code>, <code>sumpr</code>&rarr;<code>Math.sumPrecise</code>,
+                <code>rxesc</code>&rarr;<code>RegExp.escape</code>, <code>fromas</code>&rarr;<code>Array.fromAsync</code>,
+                <code>itcat</code>&rarr;<code>Iterator.concat</code>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Chain Aliases (<code>ShortJS.chainAliases</code>)</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Group</th>
+              <th>Shorthand &rarr; Target (after <code>.</code>)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Array &amp; Iteration</td>
+              <td>
+                <code>mp</code>&rarr;<code>map</code>, <code>flt</code>&rarr;<code>filter</code>, <code>rdc</code>&rarr;<code>reduce</code>,
+                <code>fe</code>&rarr;<code>forEach</code>, <code>fnd</code>&rarr;<code>find</code>, <code>fndi</code>&rarr;<code>findIndex</code>,
+                <code>fndl</code>&rarr;<code>findLast</code>, <code>sm</code>&rarr;<code>some</code>, <code>ev</code>&rarr;<code>every</code>,
+                <code>inc</code>&rarr;<code>includes</code>, <code>idx</code>&rarr;<code>indexOf</code>, <code>lidx</code>&rarr;<code>lastIndexOf</code>,
+                <code>slc</code>&rarr;<code>slice</code>, <code>spl</code>&rarr;<code>splice</code>, <code>jn</code>&rarr;<code>join</code>,
+                <code>rv</code>&rarr;<code>reverse</code>, <code>srt</code>&rarr;<code>sort</code>, <code>flm</code>&rarr;<code>flatMap</code>,
+                <code>psh</code>&rarr;<code>push</code>, <code>pp</code>&rarr;<code>pop</code>, <code>shf</code>&rarr;<code>shift</code>,
+                <code>unsh</code>&rarr;<code>unshift</code>
+              </td>
+            </tr>
+            <tr>
+              <td>Promise</td>
+              <td><code>thn</code>&rarr;<code>then</code>, <code>cth</code>&rarr;<code>catch</code>, <code>fin</code>&rarr;<code>finally</code></td>
+            </tr>
+            <tr>
+              <td>String</td>
+              <td>
+                <code>trm</code>&rarr;<code>trim</code>, <code>trms</code>&rarr;<code>trimStart</code>, <code>trme</code>&rarr;<code>trimEnd</code>,
+                <code>tupc</code>&rarr;<code>toUpperCase</code>, <code>tlwc</code>&rarr;<code>toLowerCase</code>, <code>rpl</code>&rarr;<code>replace</code>,
+                <code>rpla</code>&rarr;<code>replaceAll</code>, <code>splt</code>&rarr;<code>split</code>, <code>sw</code>&rarr;<code>startsWith</code>,
+                <code>ew</code>&rarr;<code>endsWith</code>, <code>padl</code>&rarr;<code>padStart</code>, <code>padr</code>&rarr;<code>padEnd</code>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="source-code">
+        <h2>9. Full Implementation</h2>
+        <pre><code>const ShortJS = {
+  aliases: {
+    fu: 'function', af: 'async function', gf: 'function*', agf: 'async function*',
+    aw: 'await', rt: 'return', yld: 'yield', ct: 'const', lt: 'let', vr: 'var',
+    cls: 'class', ext: 'extends', nw: 'new', th: 'this', spr: 'super',
+    imp: 'import', exp: 'export', df: 'default', del: 'delete', vd: 'void', dbg: 'debugger',
+    ifn: 'if', elf: 'else', sw: 'switch', cs: 'case', brk: 'break', cnt: 'continue',
+    fr: 'for', wh: 'while', dw: 'do', tryc: 'try', ctch: 'catch', fnl: 'finally',
+    thr: 'throw', tof: 'typeof', iof: 'instanceof', inop: 'in',
+    tr: 'true', fl: 'false', nl: 'null', und: 'undefined', nanv: 'NaN', infv: 'Infinity',
+    gbl: 'globalThis', cl: 'console.log', cw: 'console.warn', ce: 'console.error',
+    jp: 'JSON.parse', js: 'JSON.stringify', rjs: 'JSON.rawJSON',
+    sumpr: 'Math.sumPrecise', rxesc: 'RegExp.escape', fromas: 'Array.fromAsync', itcat: 'Iterator.concat'
+  },
+  chainAliases: {
+    mp: 'map', flt: 'filter', rdc: 'reduce', fe: 'forEach', fnd: 'find', fndi: 'findIndex',
+    fndl: 'findLast', sm: 'some', ev: 'every', inc: 'includes', idx: 'indexOf', lidx: 'lastIndexOf',
+    slc: 'slice', spl: 'splice', jn: 'join', rv: 'reverse', srt: 'sort', flm: 'flatMap',
+    psh: 'push', pp: 'pop', shf: 'shift', unsh: 'unshift', thn: 'then', cth: 'catch', fin: 'finally',
+    trm: 'trim', trms: 'trimStart', trme: 'trimEnd', tupc: 'toUpperCase', tlwc: 'toLowerCase',
+    rpl: 'replace', rpla: 'replaceAll', splt: 'split', sw: 'startsWith', ew: 'endsWith',
+    padl: 'padStart', padr: 'padEnd'
+  },
+  protectedNames: new Set(),
+  protect(...n) { n.flat().forEach(k =&gt; this.protectedNames.add(k)); return this; },
+  unprotect(...n) { n.flat().forEach(k =&gt; this.protectedNames.delete(k)); return this; },
+  add(a = {}, c = {}) { Object.assign(this.aliases, a); Object.assign(this.chainAliases, c); return this; },
+  remove(a = [], c = []) { a.forEach(k =&gt; delete this.aliases[k]); c.forEach(k =&gt; delete this.chainAliases[k]); return this; },
+
+  expandWithMap(code, extraA = {}, extraC = {}) {
+    const map = { ...this.aliases, ...extraA };
+    const cmap = { ...this.chainAliases, ...extraC };
+    const prot = this.protectedNames;
+    const rxKw = new Set(['return','throw','case','delete','void','typeof','instanceof','in','of','new','yield','await','else','do']);
+    const isIdStart = c =&gt; /[a-zA-Z_$]/.test(c);
+    const isId = c =&gt; /[a-zA-Z0-9_$]/.test(c);
+
+    let out = '', i = 0, quote = null, braces = [], mode = 0, rxClass = false, needRx = true;
+    const lineMap = [];
+    let srcLine = 1, outLine = 1, hasLine = false;
+
+    const pushOut = s =&gt; {
+      for (const c of s) {
+        if (!hasLine) { lineMap[outLine - 1] = srcLine; hasLine = true; }
+        out += c;
+        if (c === '
+') { outLine++; hasLine = false; }
+      }
+    };
+    const stepSrc = s =&gt; { for (const c of s) if (c === '
+') srcLine++; };
+    const emit = (s, raw = s) =&gt; { pushOut(s); stepSrc(raw); };
+
+    while (i &lt; code.length) {
+      const c = code[i], n = code[i + 1] || '', p = i ? code[i - 1] : '';
+
+      if (mode === 1) { emit(c); if (c === '
+') { mode = 0; needRx = true; } i++; continue; }
+      if (mode === 2) {
+        if (c === '*' &amp;&amp; n === '/') { emit('*/'); i += 2; mode = 0; }
+        else { emit(c); i++; }
+        continue;
+      }
+      if (mode === 3) {
+        if (c === '\' &amp;&amp; n) { emit(c + n); i += 2; continue; }
+        if (c === '[') rxClass = true;
+        else if (c === ']' &amp;&amp; rxClass) rxClass = false;
+        else if (c === '/' &amp;&amp; !rxClass) {
+          let j = i + 1;
+          while (j &lt; code.length &amp;&amp; /[a-zA-Z]/.test(code[j])) j++;
+          emit(code.slice(i, j)); i = j; mode = 0; needRx = false; continue;
+        }
+        emit(c); i++; continue;
+      }
+
+      if (quote &amp;&amp; (quote !== '`' || !braces.length)) {
+        if (quote === '`' &amp;&amp; c === '$' &amp;&amp; n === '{') { emit('${'); braces.push(1); i += 2; needRx = true; continue; }
+        if (c === '\' &amp;&amp; n) { emit(c + n); i += 2; continue; }
+        emit(c);
+        if (c === quote) { quote = null; needRx = false; }
+        i++; continue;
+      }
+
+      if (quote === '`' &amp;&amp; braces.length) {
+        if (c === '{') braces[braces.length - 1]++;
+        else if (c === '}' &amp;&amp; --braces[braces.length - 1] === 0) { braces.pop(); emit('}'); i++; continue; }
+      }
+
+      if (c === '/' &amp;&amp; n === '/') { emit('//'); i += 2; mode = 1; continue; }
+      if (c === '/' &amp;&amp; n === '*') { emit('/*'); i += 2; mode = 2; continue; }
+      if (c === '"' || c === "'" || c === '`') { quote = c; emit(c); i++; continue; }
+      if (c === '/') {
+        if (needRx) { mode = 3; rxClass = false; emit('/'); }
+        else { emit('/'); needRx = true; }
+        i++; continue;
+      }
+
+      if (isIdStart(c) &amp;&amp; !isId(p)) {
+        let e = i + 1;
+        while (e &lt; code.length &amp;&amp; isId(code[e])) e++;
+        const tok = code.slice(i, e), after = code[e] || '';
+        let exp = tok;
+        if (!isId(after) &amp;&amp; !prot.has(tok)) {
+          exp = (p === '.' ? cmap : map)[tok] || tok;
+        }
+        pushOut(exp); stepSrc(tok);
+        needRx = rxKw.has(exp);
+        i = e; continue;
+      }
+
+      if (/\s/.test(c)) { emit(c); i++; continue; }
+      emit(c);
+      needRx = !')]}'.includes(c) &amp;&amp; !(c === '+' &amp;&amp; p === '+') &amp;&amp; !(c === '-' &amp;&amp; p === '-');
+      i++;
+    }
+
+    return { code: out, lineMap };
+  },
+
+  expand(code, extraA, extraC) { return this.expandWithMap(code, extraA, extraC).code; },
+
+  mapStack(err, lineMap) {
+    if (!err?.stack || !Array.isArray(lineMap)) return err?.stack || '';
+    return err.stack.replace(/:(\d+):(\d+)/g, (m, l, col) =&gt; {
+      const orig = lineMap[Number(l) - 1];
+      return orig ? `:${orig}:${col}` : m;
+    });
+  },
+
+  run(code, extraA, extraC) {
+    const { code: exp, lineMap } = this.expandWithMap(code, extraA, extraC);
+    try { return new Function(exp)(); }
+    catch (err) { err.stack = this.mapStack(err, lineMap); throw err; }
+  }
+};</code></pre>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
